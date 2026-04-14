@@ -129,18 +129,19 @@
         const MY_ID = '202751ba-2478-48f3-b5d4-53ed1670c446'; 
 
         window.changeStatus = async (text, color) => {
-            const { error } = await supabase
-                .from('profiles')
-                .update({ status: text, color: color })
-                .eq('id', MY_ID);
+    console.log("Обновляем ID:", MY_ID); 
 
-            if (error) {
-                alert("Ошибка! Проверьте RLS политики в Supabase.");
-                console.error(error);
-            } else {
-                fetchGroup();
-            }
-        };
+    const { error } = await supabase
+        .from('profiles')
+        .update({ status: text, color: color })
+        .eq('id', MY_ID);
+
+    if (error) {
+        alert("Ошибка Supabase: " + error.message + " | Код: " + error.code);
+    } else {
+        fetchGroup();
+    }
+};
 
         async function fetchGroup() {
             const { data, error } = await supabase
