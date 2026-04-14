@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Монитор статусов</title>
     <style>
-        /* Основные стили страницы и фона */
         body {
             background-color: #f0f2f5;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,7 +16,6 @@
             color: #333;
         }
 
-        /* Стили для белых карточек */
         .card {
             background: white;
             border-radius: 12px;
@@ -42,7 +40,6 @@
             color: #1c1e21;
         }
 
-        /* Сетка для кнопок 2x2 */
         .button-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -68,13 +65,11 @@
             opacity: 0.85;
         }
 
-        /* Цвета кнопок */
         .btn-study { background-color: #2ea043; }
         .btn-coffee { background-color: #fbc02d; color: #000; border: 1px solid #d4a017; }
         .btn-game { background-color: #17a2b8; }
         .btn-home { background-color: #6c757d; }
 
-        /* Стили для списка пользователей */
         .user-item {
             display: flex;
             align-items: center;
@@ -110,10 +105,10 @@
         <div id="myInfo">Вы зашли как: ...</div>
         
         <div class="button-grid">
-            <button class="btn-study" onclick="changeStatus('📚 Учусь', '#2ea043')">📚 Учусь</button>
-            <button class="btn-coffee" onclick="changeStatus('☕ Кофе-брейк', '#fbc02d')">☕ Кофе</button>
-            <button class="btn-game" onclick="changeStatus('🎮 В игре', '#17a2b8')">🎮 В игре</button>
-            <button class="btn-home" onclick="changeStatus('🏠 Дома', '#6c757d')">🏠 Дома</button>
+            <button class="btn-study" onclick="changeStatus('📚 Учусь', '#2ea043')">📚 На работе</button>
+            <button class="btn-coffee" onclick="changeStatus('☕ Кофе-брейк', '#fbc02d')">☕ Отдыхаю</button>
+            <button class="btn-game" onclick="changeStatus('🎮 В игре', '#17a2b8')">🎮 Гринд-тайм</button>
+            <button class="btn-home" onclick="changeStatus('🏠 Дома', '#6c757d')">🏠 В своем убежище</button>
         </div>
     </div>
 
