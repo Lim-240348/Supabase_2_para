@@ -1,358 +1,337 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Монитор статусов</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Монитор статусов</title>
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            margin: 0;
+            color: #333;
+        }
 
-  <style>
-    body {
-      background-color: #f0f2f5;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-      margin: 0;
-      color: #333;
-    }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+            box-sizing: border-box;
+        }
 
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 24px;
-      width: 100%;
-      max-width: 450px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-      margin-bottom: 24px;
-      box-sizing: border-box;
-    }
+        .card h2 {
+            margin-top: 0;
+            font-size: 18px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
 
-    .card h2 {
-      margin-top: 0;
-      font-size: 18px;
-      margin-bottom: 16px;
-      font-weight: 700;
-    }
+        #myInfo {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #1c1e21;
+        }
 
-    #myInfo {
-      margin-bottom: 20px;
-      font-size: 14px;
-      color: #1c1e21;
-    }
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
 
-    .button-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+        button {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.1);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            transition: opacity 0.2s, transform 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
 
-    button {
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(0,0,0,0.1);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-    }
+        button:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
 
-    button:hover {
-      transform: translateY(-1px);
-      opacity: 0.95;
-    }
+        .btn-study { background-color: #2ea043; }
+        .btn-coffee { background-color: #fbc02d; color: #000; border: 1px solid #d4a017; }
+        .btn-game { background-color: #17a2b8; }
+        .btn-home { background-color: #6c757d; }
 
-    .btn-study { background-color: #2ea043; color: white; }
-    .btn-coffee { background-color: #fbc02d; color: #000; }
-    .btn-game { background-color: #17a2b8; color: white; }
-    .btn-home { background-color: #6c757d; color: white; }
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .user-item:last-child {
+            border-bottom: none;
+        }
 
-    .google-btn {
-      background: white;
-      color: #444;
-      border: 1px solid #ddd;
-      width: 100%;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        
+        .user-info strong {
+            font-size: 15px;
+        }
+        
+        .user-info small {
+            font-size: 13px;
+        }
 
-    .google-btn img {
-      width: 18px;
-      height: 18px;
-    }
+        .google-btn {
+            background: #fff;
+            color: #444;
+            border: 1px solid #dadce0;
+            width: 100%;
+        }
 
-    .logout-btn {
-      margin-top: 12px;
-      width: 100%;
-      background: #fff;
-      color: #333;
-      border: 1px solid #ddd;
-    }
+        .google-btn:hover {
+            background: #f8f9fa;
+            opacity: 1;
+        }
 
-    .user-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid #f0f0f0;
-    }
+        .logout-btn {
+            margin-top: 14px;
+            width: 100%;
+            background: #ffffff;
+            color: #444;
+            border: 1px solid #dadce0;
+        }
 
-    .user-item:last-child {
-      border-bottom: none;
-    }
-
-    .status-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      margin-right: 16px;
-      flex-shrink: 0;
-    }
-
-    .user-info strong {
-      font-size: 15px;
-    }
-
-    .user-info small {
-      font-size: 13px;
-      color: #666;
-    }
-
-    #debug {
-      width: 100%;
-      max-width: 450px;
-      font-size: 12px;
-      color: #666;
-      white-space: pre-wrap;
-    }
-  </style>
+        .logout-btn:hover {
+            background: #f8f9fa;
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
 
-  <div id="authBlock" class="card">
-    <h2>Вход</h2>
-    <button id="loginBtn" class="google-btn">
-      <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
-      Войти через Google
-    </button>
-  </div>
-
-  <div id="app" style="display:none; width:100%; max-width:450px;">
-    <div class="card">
-      <h2>Мой профиль</h2>
-      <div id="myInfo">Вы зашли как: ...</div>
-
-      <div class="button-grid">
-        <button class="btn-study" onclick="changeStatus('📚 Учусь', '#2ea043')">📚 На работе</button>
-        <button class="btn-coffee" onclick="changeStatus('☕ Кофе-брейк', '#fbc02d')">☕ Отдыхаю</button>
-        <button class="btn-game" onclick="changeStatus('🎮 В игре', '#17a2b8')">🎮 Гринд-тайм</button>
-        <button class="btn-home" onclick="changeStatus('🏠 Дома', '#6c757d')">🏠 В своем убежище</button>
-      </div>
-
-      <button id="logoutBtn" class="logout-btn">Выйти</button>
+    <!-- Блок входа -->
+    <div class="card" id="authCard">
+        <h2>Вход</h2>
+        <button id="loginBtn" class="google-btn">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="18" height="18">
+            Войти через Google
+        </button>
     </div>
 
-    <div class="card">
-      <h2>Монитор группы</h2>
-      <div id="groupList">
-        <small style="color:#888;">Загрузка данных...</small>
-      </div>
-    </div>
-  </div>
-
-  <div id="debug"></div>
-
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-    const URL = 'https://ampweierccskfcxrcdnv.supabase.co';
-    const KEY = 'sb_publishable_3zRLDXvDKm7moHWKQAldGA_AExXIFPO';
-
-    const supabase = createClient(URL, KEY, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true
-      }
-    });
-
-    let currentUser = null;
-    let pollId = null;
-
-    function logDebug(message, data = null) {
-      const el = document.getElementById('debug');
-      const text = data ? `${message}\n${JSON.stringify(data, null, 2)}\n\n` : `${message}\n\n`;
-      el.textContent = text + el.textContent;
-      console.log(message, data || '');
-    }
-
-    function onLogin() {
-      document.getElementById('authBlock').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-
-      if (!pollId) {
-        fetchGroup();
-        pollId = setInterval(fetchGroup, 5000);
-      }
-    }
-
-    function onLogout() {
-      document.getElementById('authBlock').style.display = 'block';
-      document.getElementById('app').style.display = 'none';
-
-      if (pollId) {
-        clearInterval(pollId);
-        pollId = null;
-      }
-    }
-
-    async function ensureProfile() {
-      if (!currentUser) return;
-
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', currentUser.id)
-        .maybeSingle();
-
-      if (error) {
-        logDebug('Ошибка при проверке профиля', error);
-        return;
-      }
-
-      if (!data) {
-        const fullName =
-          currentUser.user_metadata?.full_name ||
-          currentUser.user_metadata?.name ||
-          currentUser.email ||
-          'Без имени';
-
-        const { error: insertError } = await supabase
-          .from('profiles')
-          .insert({
-            id: currentUser.id,
-            username: fullName,
-            status: 'Онлайн',
-            color: '#2ea043'
-          });
-
-        if (insertError) {
-          logDebug('Ошибка при создании профиля', insertError);
-        } else {
-          logDebug('Профиль создан');
-        }
-      }
-    }
-
-    async function fetchGroup() {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('username', { ascending: true });
-
-      if (error) {
-        logDebug('Ошибка загрузки profiles', error);
-        return;
-      }
-
-      const list = document.getElementById('groupList');
-      list.innerHTML = data.map(user => `
-        <div class="user-item">
-          <div class="status-dot" style="background: ${user.color || '#ccc'}"></div>
-          <div class="user-info" style="flex-grow: 1;">
-            <strong>${user.username}</strong><br>
-            <small>${user.status || 'Статус не задан'}</small>
-          </div>
+    <!-- Мой профиль -->
+    <div class="card" id="profileCard" style="display: none;">
+        <h2>Мой профиль</h2>
+        <div id="myInfo">Вы зашли как: ...</div>
+        
+        <div class="button-grid">
+            <button class="btn-study" onclick="changeStatus('📚 Учусь', '#2ea043')">📚 На работе</button>
+            <button class="btn-coffee" onclick="changeStatus('☕ Кофе-брейк', '#fbc02d')">☕ Отдыхаю</button>
+            <button class="btn-game" onclick="changeStatus('🎮 В игре', '#17a2b8')">🎮 Гринд-тайм</button>
+            <button class="btn-home" onclick="changeStatus('🏠 Дома', '#6c757d')">🏠 В своем убежище</button>
         </div>
-      `).join('');
 
-      const me = data.find(u => u.id === currentUser?.id);
-      if (me) {
-        document.getElementById('myInfo').innerText = `Вы зашли как: ${me.username}`;
-      }
-    }
+        <button class="logout-btn" onclick="logout()">Выйти</button>
+    </div>
 
-    window.changeStatus = async (text, color) => {
-      if (!currentUser) return;
+    <!-- Монитор группы -->
+    <div class="card">
+        <h2>Монитор группы</h2>
+        <div id="groupList">
+            <small style="color: #888;">Загрузка данных...</small>
+        </div>
+    </div>
 
-      const { error } = await supabase
-        .from('profiles')
-        .update({ status: text, color: color })
-        .eq('id', currentUser.id);
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-      if (error) {
-        logDebug('Ошибка обновления статуса', error);
-      } else {
-        fetchGroup();
-      }
-    };
-
-    document.getElementById('loginBtn').onclick = async () => {
-      const redirectUrl = window.location.origin + window.location.pathname;
-
-      logDebug('Старт OAuth', { redirectUrl });
-
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: redirectUrl
-        }
-      });
-
-      if (error) {
-        logDebug('Ошибка signInWithOAuth', error);
-      } else {
-        logDebug('OAuth запущен', data);
-      }
-    };
-
-    document.getElementById('logoutBtn').onclick = async () => {
-      await supabase.auth.signOut();
-      currentUser = null;
-      onLogout();
-    };
-
-    async function restoreSession() {
-      const { data, error } = await supabase.auth.getSession();
-
-      if (error) {
-        logDebug('Ошибка getSession', error);
-        return;
-      }
-
-      const session = data?.session || null;
-
-      if (session?.user) {
-        currentUser = session.user;
-        logDebug('Сессия восстановлена', {
-          id: currentUser.id,
-          email: currentUser.email
+        const URL = 'https://ampweierccskfcxrcdnv.supabase.co';
+        const KEY = 'sb_publishable_3zRLDXvDKm7moHWKQAldGA_AExXIFPO';
+        const supabase = createClient(URL, KEY, {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
         });
 
-        await ensureProfile();
-        onLogin();
-      } else {
-        logDebug('Сессии нет');
-        onLogout();
-      }
-    }
+        let currentUser = null;
 
-    supabase.auth.onAuthStateChange(async (event, session) => {
-      logDebug('Auth state change', { event });
+        function showLoggedInUI() {
+            document.getElementById('authCard').style.display = 'none';
+            document.getElementById('profileCard').style.display = 'block';
+        }
 
-      if (session?.user) {
-        currentUser = session.user;
-        await ensureProfile();
-        onLogin();
-      } else {
-        currentUser = null;
-        onLogout();
-      }
-    });
+        function showLoggedOutUI() {
+            document.getElementById('authCard').style.display = 'block';
+            document.getElementById('profileCard').style.display = 'none';
+            document.getElementById('myInfo').innerText = 'Вы зашли как: ...';
+        }
 
-    restoreSession();
-  </script>
+        document.getElementById('loginBtn').onclick = async () => {
+            const redirectUrl = window.location.origin + window.location.pathname;
+
+            await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: redirectUrl
+                }
+            });
+        };
+
+        window.logout = async () => {
+            await supabase.auth.signOut();
+            currentUser = null;
+            showLoggedOutUI();
+        };
+
+        async function ensureProfile() {
+            if (!currentUser) return;
+
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', currentUser.id)
+                .maybeSingle();
+
+            if (error) {
+                console.error('Ошибка при чтении профиля:', error);
+                return;
+            }
+
+            const username =
+                currentUser.user_metadata?.full_name ||
+                currentUser.user_metadata?.name ||
+                currentUser.email ||
+                'Без имени';
+
+            if (!data) {
+                const { error: insertError } = await supabase
+                    .from('profiles')
+                    .insert({
+                        id: currentUser.id,
+                        username: username,
+                        status: 'Онлайн',
+                        color: '#2ea043',
+                        last_login: new Date().toISOString()
+                    });
+
+                if (insertError) {
+                    console.error('Ошибка при создании профиля:', insertError);
+                }
+            } else {
+                const { error: updateError } = await supabase
+                    .from('profiles')
+                    .update({
+                        username: username,
+                        last_login: new Date().toISOString()
+                    })
+                    .eq('id', currentUser.id);
+
+                if (updateError) {
+                    console.error('Ошибка при обновлении профиля:', updateError);
+                }
+            }
+        }
+
+        window.changeStatus = async (text, color) => {
+            if (!currentUser) return;
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({ status: text, color: color })
+                .eq('id', currentUser.id);
+
+            if (error) {
+                alert("Ошибка Supabase: " + error.message + " | Код: " + error.code);
+            } else {
+                fetchGroup();
+            }
+        };
+
+        async function fetchGroup() {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .order('username', { ascending: true });
+
+            if (error) {
+                console.error(error);
+                return;
+            }
+
+            const list = document.getElementById('groupList');
+            list.innerHTML = data.map(user => `
+                <div class="user-item">
+                    <div class="status-dot" style="background: ${user.color || '#ccc'}"></div>
+                    <div class="user-info" style="flex-grow: 1;">
+                        <strong>${user.username}</strong><br>
+                        <small style="color: #666;">${user.status || 'Статус не задан'}</small>
+                    </div>
+                </div>
+            `).join('');
+
+            if (currentUser) {
+                const me = data.find(u => u.id === currentUser.id);
+                if (me) {
+                    document.getElementById('myInfo').innerText = `Вы зашли как: ${me.username}`;
+                } else {
+                    document.getElementById('myInfo').innerText = `Вы зашли как: ${currentUser.user_metadata?.full_name || currentUser.email || 'Пользователь'}`;
+                }
+            }
+        }
+
+        async function restoreSession() {
+            const { data, error } = await supabase.auth.getSession();
+
+            if (error) {
+                console.error('Ошибка сессии:', error);
+                showLoggedOutUI();
+                return;
+            }
+
+            if (data.session && data.session.user) {
+                currentUser = data.session.user;
+                showLoggedInUI();
+                await ensureProfile();
+                await fetchGroup();
+            } else {
+                showLoggedOutUI();
+                await fetchGroup();
+            }
+        }
+
+        supabase.auth.onAuthStateChange(async (event, session) => {
+            if (session && session.user) {
+                currentUser = session.user;
+                showLoggedInUI();
+                await ensureProfile();
+                await fetchGroup();
+            } else {
+                currentUser = null;
+                showLoggedOutUI();
+                await fetchGroup();
+            }
+        });
+
+        await restoreSession();
+        setInterval(fetchGroup, 5000);
+    </script>
 </body>
 </html>
