@@ -1211,7 +1211,10 @@ async function fetchGroup() {
 async function fetchMessages() {
     const { data, error } = await supabase
         .from('messages')
-        .select('*')
+        .select(`
+            *,
+            message_likes(count)
+        `)
         .order('created_at', { ascending: true })
         .limit(100);
 
@@ -1241,10 +1244,15 @@ async function fetchMessages() {
                     <span class="message-name">${escapeHtml(message.username)}</span>
                     <span class="message-time">${created}</span>
                 </div>
+
                 <div class="message-text">
                     ${message.text ? escapeHtml(message.text) : ''}
                     ${message.image_url ? `<br><img src="${message.image_url}" style="max-width:200px;border-radius:10px;margin-top:6px;">` : ''}
                 </div>
+
+                <button onclick="toggleLike('${message.id}')">
+                    ❤️ ${message.message_likes[0]?.count || 0}
+                </button>
             </div>
         `;
     }).join('');
@@ -1307,7 +1315,32 @@ window.sendMessage = async () => {
 
     await checkMessageAchievements();
 };
+    
+/* ----------- LIKES ------------ */
+async function toggleLike(messageId) {
+    if (!currentUser) return;
 
+    const { data } = await supabase
+        .from('message_likes')
+        .select('*')
+        .eq('message_id', messageId)
+        .eq('user_id', currentUser.id)
+        .maybeSingle();
+
+    if (data) {
+        await supabase
+            .from('message_likes')
+            .delete()
+            .eq('id', data.id);
+    } else {
+        await supabase
+            .from('message_likes')
+            .insert({
+                message_id: messageId,
+                user_id: currentUser.id
+            });
+    }
+}
 /* ---------- REALTIME ---------- */
 
 function subscribeRealtime() {
